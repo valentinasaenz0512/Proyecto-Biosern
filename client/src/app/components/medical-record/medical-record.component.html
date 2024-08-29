@@ -1,0 +1,27 @@
+<div class="card">
+  <div class="card-header">
+    <h3>Historia Clínica</h3>
+    <button (click)="toggleEdit()">
+      {{ isEditing ? 'Cancelar' : 'Editar' }}
+    </button>
+  </div>
+  <div class="card-body" [formGroup]="historiaForm">
+    <div>
+      <label>Nombre:</label>
+      <input formControlName="nombre" [readonly]="!isEditing">
+    </div>
+    <div>
+      <label>Cédula:</label>
+      <input formControlName="cedula" [readonly]="!isEditing">
+    </div>
+    <div>
+      <label>Diagnóstico:</label>
+      <textarea formControlName="diagnostico" [readonly]="!isEditing"></textarea>
+    </div>
+    <div>
+      <label>Tratamiento:</label>
+      <textarea formControlName="tratamiento" [readonly]="!isEditing"></textarea>
+    </div>
+    <button *ngIf="isEditing" (click)="saveChanges()">Guardar</button>
+  </div>
+</div>

@@ -13,6 +13,10 @@ const db = mysql.createConnection({
     database: "biosern"
 });
 
+app.listen(3001, () => {
+    console.log('Server running on port 3001');
+});
+
 // Conectar a la base de datos al iniciar la aplicación
 db.connect((err) => {
     if (err) {
@@ -95,14 +99,14 @@ app.post("/historiaclinica/create", (req, res) => {
     );
 });
 
-app.get("/historiaclinica/:numero", (req, res) => {
-    const Numero = req.params.numero;
-    db.query('SELECT * FROM historiaclinica WHERE Numero = ?', [Numero], (err, result) => {
+app.get("/historiaclinica/:cedula", (req, res) => {
+    const cedula = req.params.cedula;
+    db.query('SELECT * FROM historiaclinica WHERE cedula = ?', [cedula], (err, result) => {
         if (err) {
-            console.log(err);
+            console.error(err);
             res.status(500).send("Error obteniendo la historia clínica.");
         } else {
-            res.send(result);
+            res.json(result);
         }
     });
 });
@@ -189,8 +193,4 @@ app.delete("/citas/delete/:codigocita", (req, res) => {
             res.send("Cita eliminada con éxito!");
         }
     });
-});
-
-app.listen(3001, () => {
-    console.log('Servidor corriendo en el puerto 3001.');
 });

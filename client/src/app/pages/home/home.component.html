@@ -1,0 +1,13 @@
+<div class="home-container">
+  <div class="home-header-container">
+    <div class="home-header-logo">
+      <img src="\assets\logo-biosern.png" alt="">
+    </div>
+    <p-tabMenu [model]="items"/>
+  </div>
+  <div>
+    <app-list-patient *ngIf="stateMenu === 0"></app-list-patient>
+    <app-medical-record *ngIf="stateMenu === 1"></app-medical-record>
+    <app-appointment *ngIf="stateMenu === 2"></app-appointment>
+  </div>
+</div>

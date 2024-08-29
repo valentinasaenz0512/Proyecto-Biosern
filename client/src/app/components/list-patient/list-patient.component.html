@@ -1,0 +1,154 @@
+<div class="card">
+  <p-toast></p-toast>
+  <p-table [value]="patients" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
+      <ng-template pTemplate="header">
+          <tr>
+              <th style="width:15%">Nombres</th>
+              <th style="width:15%">Apellidos</th>
+              <th style="width:10%">Fecha Nacimiento</th>
+              <th style="width:12%">Cedula</th>
+              <th style="width:12%">Telefono</th>
+              <th style="width:8%">Direccion</th>
+              <th style="width:20%">Correo</th>
+              <th style="width:4%">Editar</th>
+              <th style="width:4%">Historia</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-patient let-editing="editing" let-ri="rowIndex">
+          <tr [pEditableRow]="patient">
+              <td>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <input
+                              pInputText type="text"
+                              [(ngModel)]="patient.Nombres" />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{patient.Nombres}}
+                      </ng-template>
+                  </p-cellEditor>
+              </td>
+              <td>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <input
+                              pInputText type="text"
+                              [(ngModel)]="patient.Apellidos"
+                              required />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{patient.Apellidos}}
+                      </ng-template>
+                  </p-cellEditor>
+              </td>
+              <td>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-dropdown
+                              [options]="statuses"
+                              appendTo="body"
+                              [(ngModel)]="patient.Fechanac"
+                              [style]="{'width':'100%'}" />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{patient.Fechanac}}
+                      </ng-template>
+                  </p-cellEditor>
+              </td>
+              <td>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <input
+                              pInputText type="text"
+                              [(ngModel)]="patient.Cedula" />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{patient.Cedula}}
+                      </ng-template>
+                  </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input
+                            pInputText type="text"
+                            [(ngModel)]="patient.Telefono" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{patient.Telefono}}
+                    </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input
+                            pInputText type="text"
+                            [(ngModel)]="patient.Direccion" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{patient.Direccion}}
+                    </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input
+                            pInputText type="text"
+                            [(ngModel)]="patient.Correo" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{patient.Correo}}
+                    </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <div class="flex align-items-center justify-content-center gap-2">
+                    <button
+                        *ngIf="!editing"
+                        pButton
+                        pRipple
+                        type="button"
+                        pInitEditableRow
+                        icon="pi pi-pencil"
+                        (click)="onRowEditInit(patient)"
+                        class="p-button-rounded p-button-text">
+                    </button>
+                    <button
+                        *ngIf="editing"
+                        pButton
+                        pRipple
+                        type="button"
+                        pSaveEditableRow
+                        icon="pi pi-check"
+                        (click)="onRowEditSave(patient)"
+                        class="p-button-rounded p-button-text p-button-success mr-2">
+                    </button>
+                    <button
+                        *ngIf="editing"
+                        pButton pRipple
+                        type="button"
+                        pCancelEditableRow
+                        icon="pi pi-times"
+                        (click)="onRowEditCancel(patient, ri)"
+                        class="p-button-rounded p-button-text p-button-danger">
+                    </button>
+                </div>
+              </td>
+              <td>
+                <div class="flex align-items-center justify-content-center gap-2">
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        icon="pi pi-book"
+                        (click)="openRecord(patient)"
+                        class="p-button-rounded p-button-text">
+                    </button>
+                </div>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
+</div>
