@@ -6,7 +6,7 @@
     <p-tabMenu [model]="items"/>
   </div>
   <div>
-    <app-list-patient *ngIf="stateMenu === 0"></app-list-patient>
+    <app-list-patient (newItemEvent)="openRecord($event)" *ngIf="stateMenu === 0"></app-list-patient>
     <app-medical-record *ngIf="stateMenu === 1"></app-medical-record>
     <app-appointment *ngIf="stateMenu === 2"></app-appointment>
   </div>

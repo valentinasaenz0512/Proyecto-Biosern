@@ -1,27 +1,201 @@
 <div class="card">
-  <div class="card-header">
-    <h3>Historia Clínica</h3>
-    <button (click)="toggleEdit()">
-      {{ isEditing ? 'Cancelar' : 'Editar' }}
-    </button>
-  </div>
-  <div class="card-body" [formGroup]="historiaForm">
-    <div>
-      <label>Nombre:</label>
-      <input formControlName="nombre" [readonly]="!isEditing">
-    </div>
-    <div>
-      <label>Cédula:</label>
-      <input formControlName="cedula" [readonly]="!isEditing">
-    </div>
-    <div>
-      <label>Diagnóstico:</label>
-      <textarea formControlName="diagnostico" [readonly]="!isEditing"></textarea>
-    </div>
-    <div>
-      <label>Tratamiento:</label>
-      <textarea formControlName="tratamiento" [readonly]="!isEditing"></textarea>
-    </div>
-    <button *ngIf="isEditing" (click)="saveChanges()">Guardar</button>
-  </div>
+  <p-toast></p-toast>
+  <p-table [value]="historiasClinicas" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
+      <ng-template pTemplate="header">
+          <tr>
+              <th style="width:15%">Nombres</th>
+              <th style="width:15%">Apellidos</th>
+               <th style="width:12%">Cedula</th>
+               <th style="width:10%">Numero</th>
+              <th style="width:12%">EnfermedadesBase</th>
+              <th style="width:8%">Virus</th>
+              <th style="width:20%">Bacterias</th>
+              <th style="width:4%">Hongos</th>
+              <th style="width:4%">Parasitos</th>
+              <th style="width:4%">Emociones</th>
+              <th style="width:4%">Brujeria</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-historiaClinica let-editing="editing" let-ri="rowIndex">
+          <tr [pEditableRow]="historiaClinica">
+              <td>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <input
+                              pInputText type="text"
+                              [(ngModel)]="historiaClinica.Nombres" />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{historiaClinica.Nombres}}
+                      </ng-template>
+                  </p-cellEditor>
+              </td>
+              <td>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <input
+                              pInputText type="text"
+                              [(ngModel)]="historiaClinica.Apellidos"
+                              required />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{historiaClinica.Apellidos}}
+                      </ng-template>
+                  </p-cellEditor>
+              </td>
+              <td>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <p-dropdown
+                              [options]="statuses"
+                              appendTo="body"
+                              [(ngModel)]="historiaClinica.Cedula"
+                              [style]="{'width':'100%'}" />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                        {{historiaClinica.Cedula}}
+                      </ng-template>
+                  </p-cellEditor>
+              </td>
+              <td>
+                  <p-cellEditor>
+                      <ng-template pTemplate="input">
+                          <input
+                              pInputText type="text"
+                              [(ngModel)]="historiaClinica.Numero" />
+                      </ng-template>
+                      <ng-template pTemplate="output">
+                          {{historiaClinica.Numero}}
+                      </ng-template>
+                  </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input
+                            pInputText type="text"
+                            [(ngModel)]="historiaClinica.EnfermedadesBase" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{historiaClinica.EnfermedadesBase}}
+                    </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input
+                            pInputText type="text"
+                            [(ngModel)]="historiaClinica.Virus" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{historiaClinica.Virus}}
+                    </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input
+                            pInputText type="text"
+                            [(ngModel)]="historiaClinica.Bacterias" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{historiaClinica.Bacterias}}
+                    </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input
+                            pInputText type="text"
+                            [(ngModel)]="historiaClinica.Hongos" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{historiaClinica.Hongos}}
+                    </ng-template>
+                </p-cellEditor>
+              </td><td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input
+                            pInputText type="text"
+                            [(ngModel)]="historiaClinica.Parasitos" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{historiaClinica.Parasitos}}
+                    </ng-template>
+                </p-cellEditor>
+              </td><td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input
+                            pInputText type="text"
+                            [(ngModel)]="historiaClinica.Emociones" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{historiaClinica.Emociones}}
+                    </ng-template>
+                </p-cellEditor>
+              </td><td>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input
+                            pInputText type="text"
+                            [(ngModel)]="historiaClinica.Brujeria" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{historiaClinica.Brujeria}}
+                    </ng-template>
+                </p-cellEditor>
+              </td>
+              <td>
+                <div class="flex align-items-center justify-content-center gap-2">
+                    <button
+                        *ngIf="!editing"
+                        pButton
+                        pRipple
+                        type="button"
+                        pInitEditableRow
+                        icon="pi pi-pencil"
+                        (click)="onRowEditInit(historiaClinica)"
+                        class="p-button-rounded p-button-text">
+                    </button>
+                    <button
+                        *ngIf="editing"
+                        pButton
+                        pRipple
+                        type="button"
+                        pSaveEditableRow
+                        icon="pi pi-check"
+                        (click)="onRowEditSave(historiaClinica)"
+                        class="p-button-rounded p-button-text p-button-success mr-2">
+                    </button>
+                    <button
+                        *ngIf="editing"
+                        pButton pRipple
+                        type="button"
+                        pCancelEditableRow
+                        icon="pi pi-times"
+                        (click)="onRowEditCancel(historiaClinica, ri)"
+                        class="p-button-rounded p-button-text p-button-danger">
+                    </button>
+                </div>
+              </td>
+              <td>
+                <div class="flex align-items-center justify-content-center gap-2">
+                    <button
+                        pButton
+                        pRipple
+                        type="button"
+                        icon="pi pi-book"
+                        (click)="openRecord(historiaClinica)"
+                        class="p-button-rounded p-button-text">
+                    </button>
+                </div>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
 </div>

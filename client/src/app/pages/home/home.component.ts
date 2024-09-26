@@ -5,6 +5,9 @@ import { MedicalRecordComponent } from '../../components/medical-record/medical-
 import { ListPatientComponent } from '../../components/list-patient/list-patient.component';
 import { AppointmentComponent } from '../../components/appointment/appointment.component';
 import { CommonModule } from '@angular/common';
+import { Patient } from '../../shared/interfaces/patient.interface';
+import { ListMedicalRecordComponent } from '../../components/list-medical-record/list-medical-record.component';
+
 
 @Component({
   selector: 'app-home',
@@ -19,30 +22,34 @@ export class HomeComponent implements OnInit{
   stateMenu: number = 0;
 
   ngOnInit() {
-      this.items = [
-          {
-              label: 'Pacientes',
-              icon: 'pi pi-user',
-              command: () => {
-                this.stateMenu = 0;
-                console.log("holka")
-            }
-          },
-          {
-              label: 'Historia Clinica',
-              icon: 'pi pi-book',
-              command: () => {
-                this.stateMenu = 1;
-            }
-          },
-          {
-              label: 'Citas',
-              icon: 'pi pi-receipt',
-              command: () => {
-                this.stateMenu = 2;
-            }
-          },
-      ]
+    this.items = [
+      {
+          label: 'Pacientes',
+          icon: 'pi pi-user',
+          command: () => {
+            this.stateMenu = 0;
+            console.log("holka")
+        }
+      },
+      {
+          label: 'Historia Clinica',
+          icon: 'pi pi-book',
+          command: () => {
+            this.stateMenu = 1;
+        }
+      },
+      {
+          label: 'Citas',
+          icon: 'pi pi-receipt',
+          command: () => {
+            this.stateMenu = 2;
+        }
+      },
+    ]
+  }
+  openRecord(patient: Patient) {
+    console.log(patient)
+
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MessageService, SelectItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
@@ -21,6 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
   providers: [MessageService, PatientService]
 })
 export class ListPatientComponent implements OnInit {
+    @Output() newItemEvent = new EventEmitter<Patient>();
     patients!: Patient[];
     statuses!: SelectItem[];
 
@@ -32,7 +33,7 @@ export class ListPatientComponent implements OnInit {
         this.patientService.getPatients().subscribe((data) => {
 
             this.patients = data;
-            console.log(this.patients)
+   
         });
 
         this.statuses = [
@@ -57,7 +58,7 @@ export class ListPatientComponent implements OnInit {
     }
 
     openRecord(patient: Patient) {
-      console.log(patient)
+      this.newItemEvent.emit(patient);
+      
     }
-
 }

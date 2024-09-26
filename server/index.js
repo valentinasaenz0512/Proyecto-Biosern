@@ -99,6 +99,16 @@ app.post("/historiaclinica/create", (req, res) => {
     );
 });
 
+app.get("/historiaclinica", (req, res) => {
+    db.query('SELECT * FROM historiaclinica', (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send("Error obteniendo las historias clínicas.");
+        } else {
+            res.json(result);
+        }
+    });
+});
 app.get("/historiaclinica/:cedula", (req, res) => {
     const cedula = req.params.cedula;
     db.query('SELECT * FROM historiaclinica WHERE cedula = ?', [cedula], (err, result) => {
