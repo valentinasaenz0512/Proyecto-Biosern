@@ -3,7 +3,7 @@ export interface HistoriaClinica {
   Apellidos: string;
   Cedula: string;
   Numero: string;
-  EnfermedadesBase: string[];
+  Enfermedadesbase: string[];
   Virus: string[];
   Bacterias: string[];
   Hongos: string[];

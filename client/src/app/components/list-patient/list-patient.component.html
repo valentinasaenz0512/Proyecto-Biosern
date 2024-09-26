@@ -1,154 +1,220 @@
 <div class="card">
   <p-toast></p-toast>
-  <p-table [value]="patients" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
-      <ng-template pTemplate="header">
-          <tr>
-              <th style="width:15%">Nombres</th>
-              <th style="width:15%">Apellidos</th>
-              <th style="width:10%">Fecha Nacimiento</th>
-              <th style="width:12%">Cedula</th>
-              <th style="width:12%">Telefono</th>
-              <th style="width:8%">Direccion</th>
-              <th style="width:20%">Correo</th>
-              <th style="width:4%">Editar</th>
-              <th style="width:4%">Historia</th>
-          </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-patient let-editing="editing" let-ri="rowIndex">
-          <tr [pEditableRow]="patient">
-              <td>
-                  <p-cellEditor>
-                      <ng-template pTemplate="input">
-                          <input
-                              pInputText type="text"
-                              [(ngModel)]="patient.Nombres" />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                          {{patient.Nombres}}
-                      </ng-template>
-                  </p-cellEditor>
-              </td>
-              <td>
-                  <p-cellEditor>
-                      <ng-template pTemplate="input">
-                          <input
-                              pInputText type="text"
-                              [(ngModel)]="patient.Apellidos"
-                              required />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                          {{patient.Apellidos}}
-                      </ng-template>
-                  </p-cellEditor>
-              </td>
-              <td>
-                  <p-cellEditor>
-                      <ng-template pTemplate="input">
-                          <p-dropdown
-                              [options]="statuses"
-                              appendTo="body"
-                              [(ngModel)]="patient.Fechanac"
-                              [style]="{'width':'100%'}" />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                        {{patient.Fechanac}}
-                      </ng-template>
-                  </p-cellEditor>
-              </td>
-              <td>
-                  <p-cellEditor>
-                      <ng-template pTemplate="input">
-                          <input
-                              pInputText type="text"
-                              [(ngModel)]="patient.Cedula" />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                          {{patient.Cedula}}
-                      </ng-template>
-                  </p-cellEditor>
-              </td>
-              <td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input
-                            pInputText type="text"
-                            [(ngModel)]="patient.Telefono" />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{patient.Telefono}}
-                    </ng-template>
-                </p-cellEditor>
-              </td>
-              <td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input
-                            pInputText type="text"
-                            [(ngModel)]="patient.Direccion" />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{patient.Direccion}}
-                    </ng-template>
-                </p-cellEditor>
-              </td>
-              <td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input
-                            pInputText type="text"
-                            [(ngModel)]="patient.Correo" />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{patient.Correo}}
-                    </ng-template>
-                </p-cellEditor>
-              </td>
-              <td>
-                <div class="flex align-items-center justify-content-center gap-2">
-                    <button
-                        *ngIf="!editing"
-                        pButton
-                        pRipple
-                        type="button"
-                        pInitEditableRow
-                        icon="pi pi-pencil"
-                        (click)="onRowEditInit(patient)"
-                        class="p-button-rounded p-button-text">
-                    </button>
-                    <button
-                        *ngIf="editing"
-                        pButton
-                        pRipple
-                        type="button"
-                        pSaveEditableRow
-                        icon="pi pi-check"
-                        (click)="onRowEditSave(patient)"
-                        class="p-button-rounded p-button-text p-button-success mr-2">
-                    </button>
-                    <button
-                        *ngIf="editing"
-                        pButton pRipple
-                        type="button"
-                        pCancelEditableRow
-                        icon="pi pi-times"
-                        (click)="onRowEditCancel(patient, ri)"
-                        class="p-button-rounded p-button-text p-button-danger">
-                    </button>
-                </div>
-              </td>
-              <td>
-                <div class="flex align-items-center justify-content-center gap-2">
-                    <button
-                        pButton
-                        pRipple
-                        type="button"
-                        icon="pi pi-book"
-                        (click)="openRecord(patient)"
-                        class="p-button-rounded p-button-text">
-                    </button>
-                </div>
-              </td>
-          </tr>
-      </ng-template>
+
+  <p-toolbar styleClass="mb-4 gap-2">
+    <ng-template pTemplate="left">
+      <p-button
+        severity="success"
+        label="Nuevo"
+        icon="pi pi-plus"
+        class="mr-2"
+        (onClick)="openNewPatient()" />
+    </ng-template>
+
+    <ng-template pTemplate="right">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          (input)="dt.filterGlobal($event.target, 'contains')"
+          placeholder="Buscar..." />
+      </span>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    #dt
+    [value]="patients"
+    [rows]="10"
+    [paginator]="true"
+    [globalFilterFields]="['Nombres', 'Apellidos', 'Cedula', 'Telefono', 'Correo']"
+    [tableStyle]="{'min-width': '75rem'}"
+    [(selection)]="selectedPatients"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} pacientes"
+    [showCurrentPageReport]="true">
+
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <h5 class="m-0">Administrar Pacientes</h5>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="Nombres" style="width:15%">Nombres <p-sortIcon field="Nombres"></p-sortIcon></th>
+        <th pSortableColumn="Apellidos" style="width:15%">Apellidos <p-sortIcon field="Apellidos"></p-sortIcon></th>
+        <th pSortableColumn="Fechanac" style="width:10%">Fecha N. <p-sortIcon field="Fechanac"></p-sortIcon></th>
+        <th pSortableColumn="Cedula" style="width:12%">Cedula <p-sortIcon field="Cedula"></p-sortIcon></th>
+        <th pSortableColumn="Telefono" style="width:12%">Telefono <p-sortIcon field="Telefono"></p-sortIcon></th>
+        <th pSortableColumn="Direccion" style="width:10%">Direccion <p-sortIcon field="Direccion"></p-sortIcon></th>
+        <th pSortableColumn="Correo" style="width:18%">Correo <p-sortIcon field="Correo"></p-sortIcon></th>
+        <th style="width:8%">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-patient let-editing="editing" let-ri="rowIndex">
+      <tr [pEditableRow]="patient">
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="patient.Nombres" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{patient.Nombres}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="patient.Apellidos" required />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{patient.Apellidos}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="patient.Fechanac" required />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{patient.Fechanac}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="patient.Cedula" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{patient.Cedula}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="patient.Telefono" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{patient.Telefono}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="patient.Direccion" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{patient.Direccion}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <p-cellEditor>
+            <ng-template pTemplate="input">
+              <input pInputText type="text" [(ngModel)]="patient.Correo" />
+            </ng-template>
+            <ng-template pTemplate="output">
+              {{patient.Correo}}
+            </ng-template>
+          </p-cellEditor>
+        </td>
+        <td>
+          <div class="flex align-items-center justify-content-center gap-2">
+            <p-button
+              icon="pi pi-pencil"
+              class="mr-2"
+              [rounded]="true"
+              [outlined]="true"
+              severity="success"
+              (onClick)="editPatient(patient)" />
+            <p-button
+              icon="pi pi-book"
+              class="mr-2"
+              [rounded]="true"
+              [outlined]="true"
+              severity="success"
+              (onClick)="newRecord(patient)" />
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              [rounded]="true"
+              [outlined]="true"
+              (onClick)="deletePatient(patient)" />
+
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        En total hay {{ patients ? patients.length : 0 }} pacientes.
+      </div>
+    </ng-template>
   </p-table>
+
+  <p-dialog
+    [(visible)]="patientDialog"
+    [style]="{ width: '450px' }"
+    header="Detalles del Paciente"
+    [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+      <div class="field">
+        <label for="Nombres">Nombres</label>
+        <input type="text" pInputText id="Nombres" [(ngModel)]="patient.Nombres" required autofocus />
+        <small class="p-error" *ngIf="submitted && !patient.Nombres">
+          Los nombres son requeridos.
+        </small>
+      </div>
+      <div class="field">
+        <label for="Apellidos">Apellidos</label>
+        <input type="text" pInputText id="Apellidos" [(ngModel)]="patient.Apellidos" required />
+      </div>
+      <div class="field">
+        <label for="Fechanac">Fecha de Nacimiento</label>
+        <input type="text" pInputText id="Fechanac" [(ngModel)]="patient.Fechanac" required />
+      </div>
+      <div class="field">
+        <label for="Cedula">Cedula</label>
+        <input type="text" pInputText id="Cedula" [(ngModel)]="patient.Cedula" [disabled]="blockCedula" required/>
+      </div>
+      <div class="field">
+        <label for="Telefono">Telefono</label>
+        <input type="text" pInputText id="Telefono" [(ngModel)]="patient.Telefono" />
+      </div>
+      <div class="field">
+        <label for="Direccion">Direccion</label>
+        <input type="text" pInputText id="Direccion" [(ngModel)]="patient.Direccion" />
+      </div>
+      <div class="field">
+        <label for="Correo">Correo</label>
+        <input type="text" pInputText id="Correo" [(ngModel)]="patient.Correo" />
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        label="Cancelar"
+        icon="pi pi-times"
+        [text]="true"
+        (onClick)="hideDialog()" />
+      <p-button
+        label="Guardar"
+        icon="pi pi-check"
+        [text]="true"
+        (onClick)="savePatient()" />
+    </ng-template>
+  </p-dialog>
+
+  <p-confirmDialog [style]="{ width: '450px' }" />
 </div>

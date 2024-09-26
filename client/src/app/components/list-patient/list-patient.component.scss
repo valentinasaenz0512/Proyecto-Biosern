@@ -1,6 +1,238 @@
+/* list-patient.component.scss */
+
+/* Estilos base */
 .card {
-  width: 100%;
   padding: 1vw;
-  border: 2px solid rgba(180, 180, 180, 0.682);
 }
 
+/* Estilos del toolbar */
+.p-toolbar {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.p-toolbar .p-toolbar-group-left,
+.p-toolbar .p-toolbar-group-right {
+  display: flex;
+  align-items: center;
+}
+
+.p-toolbar .p-toolbar-group-left {
+  flex: 1;
+}
+
+.p-toolbar .p-toolbar-group-right {
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.p-toolbar .p-input-icon-left {
+  width: 100%;
+}
+
+/* Estilos de la tabla */
+.p-table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.p-table th,
+.p-table td {
+  word-wrap: break-word;
+  white-space: normal;
+  text-align: center;
+  padding: 0.75vw;
+  position: relative;
+
+}
+
+/* Ajuste para que el p-sortIcon esté a la derecha del texto */
+.p-table th {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.p-table th .p-sortable-column {
+  display: flex;
+  align-items: center;
+}
+
+.p-table th .p-sortable-column .p-column-title {
+  margin-right: 0.5vw;
+}
+
+.p-table th p-sortIcon {
+  margin-left: auto;
+}
+
+/* Ajuste de anchos de columna utilizando vw */
+.p-table th:nth-child(1),
+.p-table td:nth-child(1) {
+  width: 15vw;
+}
+
+.p-table th:nth-child(2),
+.p-table td:nth-child(2) {
+  width: 15vw;
+}
+
+.p-table th:nth-child(3),
+.p-table td:nth-child(3) {
+  width: 10vw;
+}
+
+.p-table th:nth-child(4),
+.p-table td:nth-child(4) {
+  width: 12vw;
+}
+
+.p-table th:nth-child(5),
+.p-table td:nth-child(5) {
+  width: 12vw;
+}
+
+.p-table th:nth-child(6),
+.p-table td:nth-child(6) {
+  width: 8vw;
+}
+
+.p-table th:nth-child(7),
+.p-table td:nth-child(7) {
+  width: 20vw;
+}
+
+.p-table th:nth-child(8),
+.p-table td:nth-child(8) {
+  width: 8vw;
+}
+
+/* Ajuste de fuentes y espaciado según el viewport utilizando vw */
+
+/* Escritorio Extra Grande (>1600px) */
+@media screen and (min-width: 1600px) {
+  .p-table th,
+  .p-table td {
+    font-size: 1.1vw;
+    padding: 1vw;
+  }
+}
+
+/* Escritorio Grande (1200px - 1599px) */
+@media screen and (min-width: 1200px) and (max-width: 1599px) {
+  .p-table th,
+  .p-table td {
+    font-size: 1vw;
+    padding: 0.75vw;
+  }
+}
+
+/* Escritorio Mediano (992px - 1199px) */
+@media screen and (min-width: 992px) and (max-width: 1199px) {
+  .p-table th,
+  .p-table td {
+    font-size: 0.95vw;
+    padding: 0.6vw;
+  }
+}
+
+/* Escritorio Pequeño (768px - 991px) */
+@media screen and (min-width: 768px) and (max-width: 991px) {
+  .p-table th,
+  .p-table td {
+    font-size: 0.9vw;
+    padding: 0.5vw;
+  }
+  /* Ocultar columna 'Direccion' */
+  .p-table th:nth-child(6),
+  .p-table td:nth-child(6) {
+    display: none;
+  }
+  /* Ajustar anchos de columna */
+  .p-table th,
+  .p-table td {
+    width: auto;
+  }
+}
+
+/* Menor a 768px */
+@media screen and (max-width: 767px) {
+  .p-table th,
+  .p-table td {
+    font-size: 0.85vw;
+    padding: 0.4vw;
+  }
+  /* Ocultar columna 'Correo' */
+  .p-table th:nth-child(7),
+  .p-table td:nth-child(7) {
+    display: none;
+  }
+  /* Ajustar anchos de columna */
+  .p-table th,
+  .p-table td {
+    width: auto;
+  }
+}
+
+/* Responsividad del toolbar */
+@media screen and (max-width: 992px) {
+  .p-toolbar {
+    flex-direction: column;
+  }
+  .p-toolbar .p-toolbar-group-left,
+  .p-toolbar .p-toolbar-group-right {
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 0.5vw;
+  }
+}
+
+/* Responsividad del diálogo */
+.p-dialog {
+  width: 30vw;
+}
+
+@media screen and (max-width: 992px) {
+  .p-dialog {
+    width: 90vw !important;
+  }
+}
+
+/* Ajuste de campos en el diálogo */
+.p-dialog .field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1vw;
+}
+
+.p-dialog .field label {
+  margin-bottom: 0.5vw;
+}
+
+/* Ajuste de botones */
+.p-button {
+  margin-right: 0.5vw;
+}
+
+@media screen and (max-width: 576px) {
+  .p-table th,
+  .p-table td {
+    font-size: 0.8vw;
+    padding: 0.3vw;
+  }
+  /* Ocultar columnas 'Telefono' y 'Cedula' */
+  .p-table th:nth-child(5),
+  .p-table td:nth-child(5),
+  .p-table th:nth-child(4),
+  .p-table td:nth-child(4) {
+    display: none;
+  }
+  /* Ajustar columna de acciones */
+  .p-table th:nth-child(8),
+  .p-table td:nth-child(8) {
+    width: 20vw;
+  }
+}

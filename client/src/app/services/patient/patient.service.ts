@@ -22,4 +22,7 @@ export class PatientService {
   updatePatient(patient: Patient) : Observable<any> {
     return this.httpClient.put<any>(this.baseUrl + "/paciente/update",patient);
   }
+  deletePatient(Cedula: string): Observable<any> {
+    return this.httpClient.delete<any>(`${this.baseUrl}/paciente/delete/${Cedula}`);
+  }
 }

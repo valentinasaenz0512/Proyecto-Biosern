@@ -1,67 +1,144 @@
+// medical-record.component.ts
+
 import { HistoriaClinica } from '../../shared/interfaces/medical-record.interface';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { MessageService, SelectItem } from 'primeng/api';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MessageService, ConfirmationService } from 'primeng/api';
+import { MedicalRecordService } from '../../services/medical-record/medical-record.service';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { TagModule } from 'primeng/tag';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
-import { PatientService } from '../../services/patient/patient.service';
-import { Patient } from '../../shared/interfaces/patient.interface';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { MedicalRecordService } from '../../services/medical-record/medical-record.service';
 import { ToastModule } from 'primeng/toast';
+import { DialogModule } from 'primeng/dialog';
+import { ToolbarModule } from 'primeng/toolbar';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { Patient } from '../../shared/interfaces/patient.interface';
 
 @Component({
   selector: 'app-medical-record',
   standalone: true,
-  imports: [TableModule, ToastModule, CommonModule, TagModule, DropdownModule, ButtonModule, InputTextModule,FormsModule,HttpClientModule],
+  imports: [
+    TableModule,
+    ToastModule,
+    CommonModule,
+    TagModule,
+    DropdownModule,
+    ButtonModule,
+    InputTextModule,
+    FormsModule,
+    HttpClientModule,
+    DialogModule,
+    ToolbarModule,
+    ConfirmDialogModule,
+    MultiSelectModule
+  ],
   templateUrl: './medical-record.component.html',
-  styleUrl: './medical-record.component.scss',
-  providers: [MessageService, MedicalRecordService]
+  styleUrls: ['./medical-record.component.scss'],
+  providers: [MessageService, ConfirmationService, MedicalRecordService],
 })
-export class MedicalRecordComponent implements OnInit{
+export class MedicalRecordComponent implements OnInit {
+  @Input() patient!: Patient;
+  historiasClinicas: HistoriaClinica[] = [];
+  selectedHistoriasClinicas: HistoriaClinica[] = [];
+  historiaClinicaDialog: boolean = false;
+  historiaClinica: HistoriaClinica = {} as HistoriaClinica;
+  submitted: boolean = false;
+  blockNumero: boolean = false;
 
-  //@Output() newItemEvent = new EventEmitter<Patient>();
-  historiasClinicas!: HistoriaClinica[];
-  statuses!: SelectItem[];
 
-  clonedHistoriasClinicas: { [s: string]: HistoriaClinica } = {};
 
-  constructor(private medicalRecordService: MedicalRecordService, private messageService: MessageService) {}
+  constructor(
+    private medicalRecordService: MedicalRecordService,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService
+  ) {}
 
   ngOnInit() {
-      this.medicalRecordService.getRecords().subscribe((data) => {
+    this.medicalRecordService.getRecords().subscribe((data) => {
+      this.historiasClinicas = data;
+    });
 
-          this.historiasClinicas = data;
-          console.log(this.historiasClinicas)
-      });
-
-      this.statuses = [
-          { label: 'In Stock', value: 'INSTOCK' },
-          { label: 'Low Stock', value: 'LOWSTOCK' },
-          { label: 'Out of Stock', value: 'OUTOFSTOCK' }
-      ];
+    if(this.patient.Cedula) {
+      console.log("holiss")
+      this.historiaClinica = {} as HistoriaClinica;
+      this.historiaClinica.Nombres = this.patient.Nombres;
+      this.historiaClinica.Apellidos = this.patient.Apellidos;
+      this.historiaClinica.Cedula = this.patient.Cedula;
+      this.openNewMedicalRecord();
+    }
   }
 
-  onRowEditInit(historiaClinica: HistoriaClinica) {
-     // this.clonedHistoriasClinicas[patient.Cedula as string] = { ...patient };
+  openNewMedicalRecord() {
+    this.blockNumero = false;
+    this.submitted = false;
+    this.historiaClinicaDialog = true;
   }
 
-  onRowEditSave(historiaClinica: HistoriaClinica) {
-    //this.patientService.updatePatient(patient).subscribe((data) => {
-  //});
+  editMedicalRecord(historiaClinica: HistoriaClinica) {
+    this.blockNumero = true;
+    this.historiaClinica = { ...historiaClinica };
+    this.historiaClinicaDialog = true;
   }
 
-  onRowEditCancel(historiaClinica: HistoriaClinica, index: number) {
-      //this.patients[index] = this.clonedPatients[patient.Cedula as string];
-     // delete this.clonedPatients[patient.Cedula as string];
+  deleteMedicalRecord(historiaClinica: HistoriaClinica) {
+    this.confirmationService.confirm({
+      message: '¿Estás seguro de que quieres eliminar la historia clínica número ' + historiaClinica.Numero + '?',
+      header: 'Confirmar',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        this.medicalRecordService.deleteRecord(historiaClinica.Numero).subscribe(
+          (data) => {
+            this.historiasClinicas = this.historiasClinicas.filter((val) => val.Numero !== historiaClinica.Numero);
+            this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Historia Clínica Eliminada', life: 3000 });
+          },
+          (error) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo eliminar la Historia Clínica', life: 3000 });
+          }
+        );
+      },
+    });
   }
 
-  openRecord(historiaClinica: HistoriaClinica) {
-    //this.newItemEvent.emit(patient);
-    
+  saveMedicalRecord() {
+    this.submitted = true;
+    if (this.blockNumero) {
+      // Actualizar historia clínica existente
+      this.medicalRecordService.updateRecord(this.historiaClinica).subscribe(
+        (data) => {
+          const index = this.historiasClinicas.findIndex((hc) => hc.Numero === this.historiaClinica.Numero);
+          this.historiasClinicas[index] = this.historiaClinica;
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Historia Clínica Actualizada', life: 3000 });
+          this.historiaClinicaDialog = false;
+          this.historiaClinica = {} as HistoriaClinica;
+        },
+        (error) => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo actualizar la Historia Clínica', life: 3000 });
+        }
+      );
+    } else {
+      // Crear nueva historia clínica
+      this.medicalRecordService.createRecord(this.historiaClinica).subscribe(
+        (data) => {
+          this.historiasClinicas.push(this.historiaClinica);
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Historia Clínica Creada', life: 3000 });
+          this.historiaClinicaDialog = false;
+          this.historiaClinica = {} as HistoriaClinica;
+        },
+        (error) => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No se pudo crear la Historia Clínica', life: 3000 });
+        }
+      );
+    }
+
+  }
+
+  hideDialog() {
+    this.historiaClinicaDialog = false;
+    this.submitted = false;
   }
 }

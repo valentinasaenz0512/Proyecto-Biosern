@@ -18,7 +18,7 @@ import { ListMedicalRecordComponent } from '../../components/list-medical-record
 })
 export class HomeComponent implements OnInit{
   items: MenuItem[] | undefined;
-
+  patient: Patient = {} as Patient;
   stateMenu: number = 0;
 
   ngOnInit() {
@@ -47,9 +47,9 @@ export class HomeComponent implements OnInit{
       },
     ]
   }
-  openRecord(patient: Patient) {
-    console.log(patient)
-
+  newRecord(patient: Patient) {
+    this.patient = patient;
+    this.stateMenu = 1;
   }
 
 }

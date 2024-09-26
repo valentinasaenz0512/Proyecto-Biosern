@@ -37,7 +37,7 @@ app.post("/paciente/create", (req, res) => {
                 console.log(err);
                 res.status(500).send("Error al registrar el paciente.");
             } else {
-                res.send("Paciente registrado con éxito!");
+                res.json({ message: "Paciente registrado con éxito!" });
             }
         }
     );
@@ -54,7 +54,7 @@ app.get("/paciente", (req, res) => {
     });
 });
 
-app.put("/paciente/update", (req, res) => {
+app.put("/paciente/update", (req, res) => { 
     const { Nombres, Apellidos, Fechanac, Cedula, Telefono, Direccion, Correo } = req.body;
     db.query(
         'UPDATE paciente SET Nombres=?, Apellidos=?, Fechanac=?, Telefono=?, Direccion=?, Correo=? WHERE Cedula=?',
@@ -64,11 +64,12 @@ app.put("/paciente/update", (req, res) => {
                 console.log(err);
                 res.status(500).send("Error al actualizar el paciente.");
             } else {
-                res.send("Paciente actualizado con éxito!");
+                res.json({ message: "Paciente actualizado con éxito!"});
             }
         }
     );
 });
+
 
 app.delete("/paciente/delete/:Cedula", (req, res) => {
     const Cedula = req.params.Cedula;
@@ -77,27 +78,33 @@ app.delete("/paciente/delete/:Cedula", (req, res) => {
             console.log(err);
             res.status(500).send("Error al eliminar el paciente.");
         } else {
-            res.send("Paciente eliminado con éxito!");
+            res.json({ message: "Paciente eliminado con éxito!"});
         }
     });
 });
 
 // Rutas para la tabla historiaclinica
 app.post("/historiaclinica/create", (req, res) => {
-    const { Nombres, Apellidos, Cedula, Numero, EnfermedadesBase, Virus, Bacterias, Hongos, Parasitos, Emociones, Brujeria } = req.body;
+    const { Nombres, Apellidos, Cedula, Enfermedadesbase, Virus, Bacterias, Hongos, Parasitos, Emociones, Brujeria } = req.body;
+
+    // Validación básica para asegurarse de que todos los campos requeridos están presentes
+    if (!Nombres || !Apellidos || !Cedula) {
+        return res.status(400).send("Faltan campos obligatorios.");
+    }
+
     db.query(
-        'INSERT INTO historiaclinica (Nombres, Apellidos, Cedula, Numero, EnfermedadesBase, Virus, Bacterias, Hongos, Parasitos, Emociones, Brujeria) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [Nombres, Apellidos, Cedula, Numero, EnfermedadesBase, Virus, Bacterias, Hongos, Parasitos, Emociones, Brujeria],
+        'INSERT INTO historiaclinica (Nombres, Apellidos, Cedula, Enfermedadesbase, Virus, Bacterias, Hongos, Parasitos, Emociones, Brujeria) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [Nombres, Apellidos, Cedula, Enfermedadesbase, Virus, Bacterias, Hongos, Parasitos, Emociones, Brujeria],
         (err, result) => {
             if (err) {
-                console.log(err);
-                res.status(500).send("Error al registrar la historia clínica.");
-            } else {
-                res.send("Historia clínica registrada con éxito!");
+                console.error("Error al registrar la historia clínica:", err);
+                return res.status(500).send("Error al registrar la historia clínica.");
             }
+            res.json({ message: "Historia clínica creada con éxito!" });
         }
     );
 });
+
 
 app.get("/historiaclinica", (req, res) => {
     db.query('SELECT * FROM historiaclinica', (err, result) => {
@@ -122,16 +129,16 @@ app.get("/historiaclinica/:cedula", (req, res) => {
 });
 
 app.put("/historiaclinica/update", (req, res) => {
-    const { Numero, Nombres, Apellidos, EnfermedadesBase, Virus, Bacterias, Hongos, Parasitos, Emociones, Brujeria } = req.body;
+    const { Numero, Nombres, Apellidos, Enfermedadesbase, Virus, Bacterias, Hongos, Parasitos, Emociones, Brujeria } = req.body;
     db.query(
-        'UPDATE historiaclinica SET Nombres=?, Apellidos=?, EnfermedadesBase=?, Virus=?, Bacterias=?, Hongos=?, Parasitos=?, Emociones=?, Brujeria=? WHERE Numero=?',
-        [Nombres, Apellidos, EnfermedadesBase, Virus, Bacterias, Hongos, Parasitos, Emociones, Brujeria, Numero],
+        'UPDATE historiaclinica SET Nombres=?, Apellidos=?, Enfermedadesbase=?, Virus=?, Bacterias=?, Hongos=?, Parasitos=?, Emociones=?, Brujeria=? WHERE Numero=?',
+        [Nombres, Apellidos, Enfermedadesbase, Virus, Bacterias, Hongos, Parasitos, Emociones, Brujeria, Numero],
         (err, result) => {
             if (err) {
                 console.log(err);
                 res.status(500).send("Error al actualizar la historia clínica.");
             } else {
-                res.send("Historia clínica actualizada con éxito!");
+                res.json({ message: "Historia clinica actualizada con éxito!"});
             }
         }
     );
@@ -144,7 +151,7 @@ app.delete("/historiaclinica/delete/:numero", (req, res) => {
             console.log(err);
             res.status(500).send("Error al eliminar la historia clínica.");
         } else {
-            res.send("Historia clínica eliminada con éxito!");
+            res.json({ message: "Historia clinica eliminada con éxito!"});
         }
     });
 });

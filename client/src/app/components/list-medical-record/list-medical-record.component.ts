@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
-import { HistoriaClinicaService, HistoriaClinica } from '../historia-clinica.service';
+import { Component, OnInit } from '@angular/core';
+
 @Component({
   selector: 'app-list-medical-record',
   standalone: true,
@@ -9,13 +8,10 @@ import { HistoriaClinicaService, HistoriaClinica } from '../historia-clinica.ser
   styleUrl: './list-medical-record.component.scss'
 })
 export class ListMedicalRecordComponent implements OnInit {
-  historiasClinicas: HistoriaClinica[] = [];
 
-  constructor(private historiaClinicaService: HistoriaClinicaService) { }
 
-  ngOnInit(): void {
-    this.historiaClinicaService.getHistoriasClinicas().subscribe(data => {
-      this.historiasClinicas = data;
-    });
-  }
+
+  constructor() { }
+
+  ngOnInit(): void {}
 }

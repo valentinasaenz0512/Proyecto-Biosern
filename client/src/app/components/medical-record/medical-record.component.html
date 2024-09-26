@@ -1,201 +1,233 @@
+<!-- medical-record.component.html -->
+
 <div class="card">
   <p-toast></p-toast>
-  <p-table [value]="historiasClinicas" dataKey="id" editMode="row" [tableStyle]="{'min-width': '50rem'}">
-      <ng-template pTemplate="header">
-          <tr>
-              <th style="width:15%">Nombres</th>
-              <th style="width:15%">Apellidos</th>
-               <th style="width:12%">Cedula</th>
-               <th style="width:10%">Numero</th>
-              <th style="width:12%">EnfermedadesBase</th>
-              <th style="width:8%">Virus</th>
-              <th style="width:20%">Bacterias</th>
-              <th style="width:4%">Hongos</th>
-              <th style="width:4%">Parasitos</th>
-              <th style="width:4%">Emociones</th>
-              <th style="width:4%">Brujeria</th>
-          </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-historiaClinica let-editing="editing" let-ri="rowIndex">
-          <tr [pEditableRow]="historiaClinica">
-              <td>
-                  <p-cellEditor>
-                      <ng-template pTemplate="input">
-                          <input
-                              pInputText type="text"
-                              [(ngModel)]="historiaClinica.Nombres" />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                          {{historiaClinica.Nombres}}
-                      </ng-template>
-                  </p-cellEditor>
-              </td>
-              <td>
-                  <p-cellEditor>
-                      <ng-template pTemplate="input">
-                          <input
-                              pInputText type="text"
-                              [(ngModel)]="historiaClinica.Apellidos"
-                              required />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                          {{historiaClinica.Apellidos}}
-                      </ng-template>
-                  </p-cellEditor>
-              </td>
-              <td>
-                  <p-cellEditor>
-                      <ng-template pTemplate="input">
-                          <p-dropdown
-                              [options]="statuses"
-                              appendTo="body"
-                              [(ngModel)]="historiaClinica.Cedula"
-                              [style]="{'width':'100%'}" />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                        {{historiaClinica.Cedula}}
-                      </ng-template>
-                  </p-cellEditor>
-              </td>
-              <td>
-                  <p-cellEditor>
-                      <ng-template pTemplate="input">
-                          <input
-                              pInputText type="text"
-                              [(ngModel)]="historiaClinica.Numero" />
-                      </ng-template>
-                      <ng-template pTemplate="output">
-                          {{historiaClinica.Numero}}
-                      </ng-template>
-                  </p-cellEditor>
-              </td>
-              <td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input
-                            pInputText type="text"
-                            [(ngModel)]="historiaClinica.EnfermedadesBase" />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{historiaClinica.EnfermedadesBase}}
-                    </ng-template>
-                </p-cellEditor>
-              </td>
-              <td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input
-                            pInputText type="text"
-                            [(ngModel)]="historiaClinica.Virus" />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{historiaClinica.Virus}}
-                    </ng-template>
-                </p-cellEditor>
-              </td>
-              <td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input
-                            pInputText type="text"
-                            [(ngModel)]="historiaClinica.Bacterias" />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{historiaClinica.Bacterias}}
-                    </ng-template>
-                </p-cellEditor>
-              </td>
-              <td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input
-                            pInputText type="text"
-                            [(ngModel)]="historiaClinica.Hongos" />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{historiaClinica.Hongos}}
-                    </ng-template>
-                </p-cellEditor>
-              </td><td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input
-                            pInputText type="text"
-                            [(ngModel)]="historiaClinica.Parasitos" />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{historiaClinica.Parasitos}}
-                    </ng-template>
-                </p-cellEditor>
-              </td><td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input
-                            pInputText type="text"
-                            [(ngModel)]="historiaClinica.Emociones" />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{historiaClinica.Emociones}}
-                    </ng-template>
-                </p-cellEditor>
-              </td><td>
-                <p-cellEditor>
-                    <ng-template pTemplate="input">
-                        <input
-                            pInputText type="text"
-                            [(ngModel)]="historiaClinica.Brujeria" />
-                    </ng-template>
-                    <ng-template pTemplate="output">
-                        {{historiaClinica.Brujeria}}
-                    </ng-template>
-                </p-cellEditor>
-              </td>
-              <td>
-                <div class="flex align-items-center justify-content-center gap-2">
-                    <button
-                        *ngIf="!editing"
-                        pButton
-                        pRipple
-                        type="button"
-                        pInitEditableRow
-                        icon="pi pi-pencil"
-                        (click)="onRowEditInit(historiaClinica)"
-                        class="p-button-rounded p-button-text">
-                    </button>
-                    <button
-                        *ngIf="editing"
-                        pButton
-                        pRipple
-                        type="button"
-                        pSaveEditableRow
-                        icon="pi pi-check"
-                        (click)="onRowEditSave(historiaClinica)"
-                        class="p-button-rounded p-button-text p-button-success mr-2">
-                    </button>
-                    <button
-                        *ngIf="editing"
-                        pButton pRipple
-                        type="button"
-                        pCancelEditableRow
-                        icon="pi pi-times"
-                        (click)="onRowEditCancel(historiaClinica, ri)"
-                        class="p-button-rounded p-button-text p-button-danger">
-                    </button>
-                </div>
-              </td>
-              <td>
-                <div class="flex align-items-center justify-content-center gap-2">
-                    <button
-                        pButton
-                        pRipple
-                        type="button"
-                        icon="pi pi-book"
-                        (click)="openRecord(historiaClinica)"
-                        class="p-button-rounded p-button-text">
-                    </button>
-                </div>
-              </td>
-          </tr>
-      </ng-template>
+
+  <p-toolbar styleClass="mb-4 gap-2">
+
+    <ng-template pTemplate="right">
+      <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          type="text"
+          (input)="dt.filterGlobal($event.target, 'contains')"
+          placeholder="Buscar..."
+        />
+      </span>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    #dt
+    [value]="historiasClinicas"
+    [paginator]="true"
+    [rows]="10"
+    [globalFilterFields]="['Nombres', 'Apellidos', 'Cedula', 'Numero']"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [rowHover]="true"
+    dataKey="Numero"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} historias clínicas"
+    [showCurrentPageReport]="true"
+  >
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <h5 class="m-0">Administrar Historias Clínicas</h5>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="Nombres" style="width:10%">
+          <div class="header-content">
+            <span class="header-text">Nombres</span>
+            <p-sortIcon field="Nombres"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="Apellidos" style="width:10%">
+          <div class="header-content">
+            <span class="header-text">Apellidos</span>
+            <p-sortIcon field="Apellidos"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="Cedula" style="width:10%">
+          <div class="header-content">
+            <span class="header-text">Cédula</span>
+            <p-sortIcon field="Cedula"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="Numero" style="width:10%">
+          <div class="header-content">
+            <span class="header-text">Número</span>
+            <p-sortIcon field="Numero"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="Enfermedadesbase" style="width:15%">
+          <div class="header-content">
+            <span class="header-text">Enfermedades Base</span>
+            <p-sortIcon field="Enfermedadesbase"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="Virus" style="width:10%">
+          <div class="header-content">
+            <span class="header-text">Virus</span>
+            <p-sortIcon field="Virus"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="Bacterias" style="width:10%">
+          <div class="header-content">
+            <span class="header-text">Bacterias</span>
+            <p-sortIcon field="Bacterias"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="Hongos" style="width:10%">
+          <div class="header-content">
+            <span class="header-text">Hongos</span>
+            <p-sortIcon field="Hongos"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="Parasitos" style="width:10%">
+          <div class="header-content">
+            <span class="header-text">Parásitos</span>
+            <p-sortIcon field="Parasitos"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="Emociones" style="width:10%">
+          <div class="header-content">
+            <span class="header-text">Emociones</span>
+            <p-sortIcon field="Emociones"></p-sortIcon>
+          </div>
+        </th>
+        <th pSortableColumn="Brujeria" style="width:10%">
+          <div class="header-content">
+            <span class="header-text">Brujería</span>
+            <p-sortIcon field="Brujeria"></p-sortIcon>
+          </div>
+        </th>
+        <th style="width:8%">Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-historiaClinica>
+      <tr>
+        <td>{{ historiaClinica.Nombres }}</td>
+        <td>{{ historiaClinica.Apellidos }}</td>
+        <td>{{ historiaClinica.Cedula }}</td>
+        <td>{{ historiaClinica.Numero }}</td>
+        <td>{{ historiaClinica.Enfermedadesbase }}</td>
+        <td>{{ historiaClinica.Virus }}</td>
+        <td>{{ historiaClinica.Bacterias }}</td>
+        <td>{{ historiaClinica.Hongos }}</td>
+        <td>{{ historiaClinica.Parasitos }}</td>
+        <td>{{ historiaClinica.Emociones }}</td>
+        <td>{{ historiaClinica.Brujeria }}</td>
+        <td>
+          <div class="flex align-items-center justify-content-center gap-2">
+            <p-button
+              icon="pi pi-pencil"
+              class="mr-2"
+              [rounded]="true"
+              [outlined]="true"
+              severity="success"
+              (onClick)="editMedicalRecord(historiaClinica)"
+            ></p-button>
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              [rounded]="true"
+              [outlined]="true"
+              (onClick)="deleteMedicalRecord(historiaClinica)"
+            ></p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        En total hay {{ historiasClinicas ? historiasClinicas.length : 0 }} historias clínicas.
+      </div>
+    </ng-template>
   </p-table>
+
+  <!-- Diálogo para crear/editar historias clínicas -->
+  <p-dialog
+    [(visible)]="historiaClinicaDialog"
+    [style]="{ width: '600px' }"
+    header="Detalles de la Historia Clínica"
+    [modal]="true"
+    styleClass="p-fluid"
+  >
+    <ng-template pTemplate="content">
+      <div class="field">
+        <label for="Nombres">Nombres</label>
+        <input
+          type="text"
+          pInputText
+          id="Nombres"
+          [(ngModel)]="historiaClinica.Nombres"
+          required
+          autofocus
+          [disabled]="!blockNumero"
+        />
+        <small class="p-error" *ngIf="submitted && !historiaClinica.Nombres">
+          Los nombres son requeridos.
+        </small>
+      </div>
+      <div class="field">
+        <label for="Apellidos">Apellidos</label>
+        <input type="text" pInputText id="Apellidos" [(ngModel)]="historiaClinica.Apellidos" required [disabled]="!blockNumero"/>
+      </div>
+      <div class="field">
+        <label for="Cedula">Cédula</label>
+        <input type="text" pInputText id="Cedula" [(ngModel)]="historiaClinica.Cedula" [disabled]="true" required />
+      </div>
+      <div class="field" *ngIf="blockNumero">
+        <label for="Numero">Número</label>
+        <input
+          type="text"
+          pInputText
+          id="Numero"
+          [(ngModel)]="historiaClinica.Numero"
+          [disabled]="blockNumero"
+          required
+        />
+      </div>
+      <div class="field">
+        <label for="Enfermedadesbase">Enfermedades Base</label>
+        <input type="text" pInputText id="Enfermedadesbase" [(ngModel)]="historiaClinica.Enfermedadesbase" />
+      </div>
+      <div class="field">
+        <label for="Virus">Virus</label>
+        <input type="text" pInputText id="Virus" [(ngModel)]="historiaClinica.Virus" />
+      </div>
+      <div class="field">
+        <label for="Bacterias">Bacterias</label>
+        <input type="text" pInputText id="Bacterias" [(ngModel)]="historiaClinica.Bacterias" />
+      </div>
+      <div class="field">
+        <label for="Hongos">Hongos</label>
+        <input type="text" pInputText id="Hongos" [(ngModel)]="historiaClinica.Hongos" />
+      </div>
+      <div class="field">
+        <label for="Parasitos">Parásitos</label>
+        <input type="text" pInputText id="Parasitos" [(ngModel)]="historiaClinica.Parasitos" />
+      </div>
+      <div class="field">
+        <label for="Emociones">Emociones</label>
+        <input type="text" pInputText id="Emociones" [(ngModel)]="historiaClinica.Emociones" />
+      </div>
+      <div class="field">
+        <label for="Brujeria">Brujería</label>
+        <input type="text" pInputText id="Brujeria" [(ngModel)]="historiaClinica.Brujeria" />
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <p-button label="Cancelar" icon="pi pi-times" [text]="true" (onClick)="hideDialog()"></p-button>
+      <p-button label="Guardar" icon="pi pi-check" [text]="true" (onClick)="saveMedicalRecord()"></p-button>
+    </ng-template>
+  </p-dialog>
+
+  <p-confirmDialog [style]="{ width: '450px' }"></p-confirmDialog>
 </div>
