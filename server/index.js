@@ -158,10 +158,10 @@ app.delete("/historiaclinica/delete/:numero", (req, res) => {
 
 // Rutas para la tabla citas
 app.post("/citas/create", (req, res) => {
-    const { codigocita, cedulapac, fechacita, hora, codterapeuta, telefono, numerohis, tipo, correo, motivo, estado, nota, nombre, apellido } = req.body;
+    const {cedulapac, fechacita, hora, numerohis, tipo, motivo, estado, nota, } = req.body;
     db.query(
-        'INSERT INTO citas (codigocita, cedulapac, fechacita, hora, codterapeuta, telefono, numerohis, tipo, correo, motivo, estado, nota, nombre, apellido) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [codigocita, cedulapac, fechacita, hora, codterapeuta, telefono, numerohis, tipo, correo, motivo, estado, nota, nombre, apellido],
+        'INSERT INTO citas (cedulapac, fechacita, hora, numerohis, tipo, motivo, estado, nota) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        [cedulapac, fechacita, hora, numerohis, tipo, motivo, estado, nota],
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -185,10 +185,10 @@ app.get("/citas", (req, res) => {
 });
 
 app.put("/citas/update", (req, res) => {
-    const { codigocita, cedulapac, fechacita, hora, codterapeuta, telefono, numerohis, tipo, correo, motivo, estado, nota, nombre, apellido } = req.body;
+    const { cedulapac, fechacita, hora,  numerohis, tipo,  motivo, estado, nota } = req.body;
     db.query(
-        'UPDATE citas SET cedulapac=?, fechacita=?, hora=?, codterapeuta=?, telefono=?, numerohis=?, tipo=?, correo=?, motivo=?, estado=?, nota=?, nombre=?, apellido=? WHERE codigocita=?',
-        [cedulapac, fechacita, hora, codterapeuta, telefono, numerohis, tipo, correo, motivo, estado, nota, nombre, apellido, codigocita],
+        'UPDATE citas SET cedulapac=?, fechacita=?, hora=?, tipo=?, motivo=?, estado=?, nota=? WHERE numerohis=?',
+        [cedulapac, fechacita, hora, tipo, motivo, estado, nota, numerohis],
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -200,9 +200,9 @@ app.put("/citas/update", (req, res) => {
     );
 });
 
-app.delete("/citas/delete/:codigocita", (req, res) => {
-    const codigocita = req.params.codigocita;
-    db.query('DELETE FROM citas WHERE codigocita = ?', [codigocita], (err, result) => {
+app.delete("/citas/delete/:numerohis", (req, res) => {
+    const numerohis = req.params.numerohis;
+    db.query('DELETE FROM citas WHERE numerohis = ?', [numerohis], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send("Error al eliminar la cita.");
