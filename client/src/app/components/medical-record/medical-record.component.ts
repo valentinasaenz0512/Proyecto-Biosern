@@ -64,10 +64,7 @@ export class MedicalRecordComponent implements OnInit {
     });
 
     if(this.patient.Cedula) {
-      console.log("holiss")
       this.historiaClinica = {} as HistoriaClinica;
-      this.historiaClinica.Nombres = this.patient.Nombres;
-      this.historiaClinica.Apellidos = this.patient.Apellidos;
       this.historiaClinica.Cedula = this.patient.Cedula;
       this.openNewMedicalRecord();
     }

@@ -4,10 +4,13 @@
       <img src="\assets\logo-biosern.png" alt="">
     </div>
     <p-tabMenu [model]="items"/>
+    <div class="logout-button">
+      <p-button label="Cerrar Sesión" icon="pi pi-power-off" (onClick)="logout()"></p-button>
+    </div>
   </div>
   <div>
-    <app-list-patient (newItemEvent)="newRecord($event)" *ngIf="stateMenu === 0"></app-list-patient>
+    <app-list-patient (newRecordEvent)="newRecord($event)"(newAppointmentEvent)="newAppointment($event)" *ngIf="stateMenu === 0"></app-list-patient>
     <app-medical-record [patient]="patient" *ngIf="stateMenu === 1"></app-medical-record>
-    <app-appointment *ngIf="stateMenu === 2"></app-appointment>
+    <app-appointment [patient]="patient"  *ngIf="stateMenu === 2"></app-appointment>
   </div>
 </div>

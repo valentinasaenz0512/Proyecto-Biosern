@@ -5,22 +5,12 @@
     <ng-template pTemplate="left">
       <p-button
         severity="success"
-        label="Nuevo"
+        label="Nuevo Paciente"
         icon="pi pi-plus"
         class="mr-2"
         (onClick)="openNewPatient()" />
     </ng-template>
 
-    <ng-template pTemplate="right">
-      <span class="p-input-icon-left">
-        <i class="pi pi-search"></i>
-        <input
-          pInputText
-          type="text"
-          (input)="dt.filterGlobal($event.target, 'contains')"
-          placeholder="Buscar..." />
-      </span>
-    </ng-template>
   </p-toolbar>
 
   <p-table
@@ -83,7 +73,7 @@
               <input pInputText type="text" [(ngModel)]="patient.Fechanac" required />
             </ng-template>
             <ng-template pTemplate="output">
-              {{patient.Fechanac}}
+              {{patient.Fechanac | date: 'dd/MM/yyyy' }}
             </ng-template>
           </p-cellEditor>
         </td>
@@ -144,6 +134,13 @@
               severity="success"
               (onClick)="newRecord(patient)" />
             <p-button
+              icon="pi pi-calendar-plus"
+              class="mr-2"
+              [rounded]="true"
+              [outlined]="true"
+              severity="success"
+              (onClick)="newAppointment(patient)" />
+            <p-button
               icon="pi pi-trash"
               severity="danger"
               [rounded]="true"
@@ -181,8 +178,11 @@
         <input type="text" pInputText id="Apellidos" [(ngModel)]="patient.Apellidos" required />
       </div>
       <div class="field">
-        <label for="Fechanac">Fecha de Nacimiento</label>
-        <input type="text" pInputText id="Fechanac" [(ngModel)]="patient.Fechanac" required />
+        <label for="Fechanac">Fecha de la Cita</label>
+        <input type="date" pInputText id="Fechanac" [(ngModel)]="patient.Fechanac" required />
+        <small class="p-error" *ngIf="submitted && !patient.Fechanac">
+          La fecha es requerida.
+        </small>
       </div>
       <div class="field">
         <label for="Cedula">Cedula</label>

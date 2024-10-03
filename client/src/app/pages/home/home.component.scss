@@ -1,5 +1,5 @@
 .home-container {
- width: 100%;
+  width: 100%;
 }
 
 .home-header-container {
@@ -18,4 +18,18 @@
       height: 100%;
     }
   }
- }
+
+  .logout-button {
+    margin-left: auto; /* Empuja el botón al extremo derecho */
+    height: 2.5vw; /* Altura ajustada para que coincida con el contenedor */
+    padding: 0 1.5vw; /* Añade un espacio horizontal al botón */
+    font-size: 1vw; /* Tamaño de fuente proporcional */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white; /* Texto en blanco */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+}

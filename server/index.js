@@ -85,7 +85,7 @@ app.delete("/paciente/delete/:Cedula", (req, res) => {
 
 // Rutas para la tabla historiaclinica
 app.post("/historiaclinica/create", (req, res) => {
-    const { Nombres, Apellidos, Cedula, Enfermedadesbase, Virus, Bacterias, Hongos, Parasitos, Emociones, Brujeria } = req.body;
+    const {Cedula, Enfermedadesbase, Virus, Bacterias, Hongos, Parasitos, Emociones, SistemaEnergetico } = req.body;
 
     // Validación básica para asegurarse de que todos los campos requeridos están presentes
     if (!Nombres || !Apellidos || !Cedula) {
@@ -93,8 +93,8 @@ app.post("/historiaclinica/create", (req, res) => {
     }
 
     db.query(
-        'INSERT INTO historiaclinica (Nombres, Apellidos, Cedula, Enfermedadesbase, Virus, Bacterias, Hongos, Parasitos, Emociones, Brujeria) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [Nombres, Apellidos, Cedula, Enfermedadesbase, Virus, Bacterias, Hongos, Parasitos, Emociones, Brujeria],
+        'INSERT INTO historiaclinica (Cedula, Enfermedadesbase, Virus, Bacterias, Hongos, Parasitos, Emociones, SistemaEnergetico) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        [Cedula, Enfermedadesbase, Virus, Bacterias, Hongos, Parasitos, Emociones, SistemaEnergetico],
         (err, result) => {
             if (err) {
                 console.error("Error al registrar la historia clínica:", err);
@@ -129,10 +129,10 @@ app.get("/historiaclinica/:cedula", (req, res) => {
 });
 
 app.put("/historiaclinica/update", (req, res) => {
-    const { Numero, Nombres, Apellidos, Enfermedadesbase, Virus, Bacterias, Hongos, Parasitos, Emociones, Brujeria } = req.body;
+    const { Numero, Enfermedadesbase, Virus, Bacterias, Hongos, Parasitos, Emociones, SistemaEnergetico } = req.body;
     db.query(
-        'UPDATE historiaclinica SET Nombres=?, Apellidos=?, Enfermedadesbase=?, Virus=?, Bacterias=?, Hongos=?, Parasitos=?, Emociones=?, Brujeria=? WHERE Numero=?',
-        [Nombres, Apellidos, Enfermedadesbase, Virus, Bacterias, Hongos, Parasitos, Emociones, Brujeria, Numero],
+        'UPDATE historiaclinica SET Enfermedadesbase=?, Virus=?, Bacterias=?, Hongos=?, Parasitos=?, Emociones=?, SistemaEnergetico=? WHERE Numero=?',
+        [Nombres, Apellidos, Enfermedadesbase, Virus, Bacterias, Hongos, Parasitos, Emociones, SistemaEnergetico, Numero],
         (err, result) => {
             if (err) {
                 console.log(err);
@@ -157,22 +157,7 @@ app.delete("/historiaclinica/delete/:numero", (req, res) => {
 });
 
 // Rutas para la tabla citas
-app.post("/citas/create", (req, res) => {
-    const {cedulapac, fechacita, hora, numerohis, tipo, motivo, estado, nota, } = req.body;
-    db.query(
-        'INSERT INTO citas (cedulapac, fechacita, hora, numerohis, tipo, motivo, estado, nota) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-        [cedulapac, fechacita, hora, numerohis, tipo, motivo, estado, nota],
-        (err, result) => {
-            if (err) {
-                console.log(err);
-                res.status(500).send("Error al registrar la cita.");
-            } else {
-                res.send("Cita registrada con éxito!");
-            }
-        }
-    );
-});
-
+// Obtener todas las citas
 app.get("/citas", (req, res) => {
     db.query('SELECT * FROM citas', (err, result) => {
         if (err) {
@@ -184,30 +169,47 @@ app.get("/citas", (req, res) => {
     });
 });
 
-app.put("/citas/update", (req, res) => {
-    const { cedulapac, fechacita, hora,  numerohis, tipo,  motivo, estado, nota } = req.body;
+// Crear una nueva cita
+app.post("/citas/create", (req, res) => {
+    const { cedula, fecha_cita, hora_cita, tipo_cita, motivo, estado_cita } = req.body;
     db.query(
-        'UPDATE citas SET cedulapac=?, fechacita=?, hora=?, tipo=?, motivo=?, estado=?, nota=? WHERE numerohis=?',
-        [cedulapac, fechacita, hora, tipo, motivo, estado, nota, numerohis],
+        'INSERT INTO citas (cedula, fecha_cita, hora_cita, tipo_cita, motivo, estado_cita) VALUES (?, ?, ?, ?, ?, ?)',
+        [cedula, fecha_cita, hora_cita, tipo_cita, motivo, estado_cita],
         (err, result) => {
             if (err) {
-                console.log(err);
-                res.status(500).send("Error al actualizar la cita.");
-            } else {
-                res.send("Cita actualizada con éxito!");
+                console.error("Error al crear la cita:", err);
+                return res.status(500).send("Error al crear la cita.");
             }
+            res.json({ message: "Cita creada con éxito!" });
         }
     );
 });
 
-app.delete("/citas/delete/:numerohis", (req, res) => {
-    const numerohis = req.params.numerohis;
-    db.query('DELETE FROM citas WHERE numerohis = ?', [numerohis], (err, result) => {
+// Actualizar una cita existente
+app.put("/citas/update", (req, res) => {
+    const { cedula, fecha_cita, hora_cita, numeroCita, tipo_cita, motivo, estado_cita } = req.body;
+    db.query(
+        'UPDATE citas SET cedula=?, fecha_cita=?, hora_cita=?, tipo_cita=?, motivo=?, estado_cita=? WHERE numeroCita=?',
+        [cedula, fecha_cita, hora_cita, tipo_cita, motivo, estado_cita, numeroCita],
+        (err, result) => {
+            if (err) {
+                console.error("Error al actualizar la cita:", err);
+                return res.status(500).send("Error al actualizar la cita.");
+            }
+            res.json({ message: "Cita actualizada con éxito!" });
+        }
+    );
+});
+
+// Eliminar una cita
+app.delete("/citas/delete/:numeroCita", (req, res) => {
+    const numeroCita = req.params.numeroCita;
+    db.query('DELETE FROM citas WHERE numeroCita = ?', [numeroCita], (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send("Error al eliminar la cita.");
         } else {
-            res.send("Cita eliminada con éxito!");
+            res.json({ message: "Cita eliminada con éxito!"});
         }
     });
 });

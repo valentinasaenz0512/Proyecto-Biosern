@@ -46,7 +46,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
   providers: [MessageService, ConfirmationService, PatientService]
 })
 export class ListPatientComponent implements OnInit {
-  @Output() newItemEvent = new EventEmitter<Patient>();
+  @Output() newRecordEvent = new EventEmitter<Patient>();
+  @Output() newAppointmentEvent = new EventEmitter<Patient>();
+
   patients!: Patient[];
   selectedPatients!: Patient[] | null;
   patientDialog: boolean = false;
@@ -75,7 +77,10 @@ export class ListPatientComponent implements OnInit {
     this.patientDialog = true;
   }
   newRecord(patient: Patient) {
-    this.newItemEvent.emit(patient);
+    this.newRecordEvent.emit(patient);
+  }
+  newAppointment(patient: Patient) {
+    this.newAppointmentEvent.emit(patient);
   }
 
   editPatient(patient: Patient) {

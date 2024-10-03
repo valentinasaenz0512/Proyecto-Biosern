@@ -1,1 +1,168 @@
-<p>appointment works!</p>
+<div class="card">
+  <p-toast></p-toast>
+
+  <p-toolbar styleClass="mb-4 gap-2">
+    <ng-template pTemplate="left">
+      <p-button
+        severity="success"
+        label="Nueva Cita"
+        icon="pi pi-plus"
+        class="mr-2"
+        (onClick)="openNewAppointment()" />
+    </ng-template>
+  </p-toolbar>
+
+  <p-table
+    #dt
+    [value]="appointments"
+    [rows]="10"
+    [paginator]="true"
+    [globalFilterFields]="['cedula', 'fecha_cita', 'hora_cita', 'numeroCita', 'tipo_cita', 'motivo', 'estado_cita']"
+    [tableStyle]="{'min-width': '75rem'}"
+    [(selection)]="selectedAppointments"
+    [rowHover]="true"
+    dataKey="numeroCita"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} citas"
+    [showCurrentPageReport]="true">
+
+    <ng-template pTemplate="caption">
+      <div class="flex align-items-center justify-content-between">
+        <h5 class="m-0">Administrar Citas Médicas</h5>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="cedula">Cédula Paciente <p-sortIcon field="cedula"></p-sortIcon></th>
+        <th pSortableColumn="fecha_cita">Fecha Cita <p-sortIcon field="fecha_cita"></p-sortIcon></th>
+        <th pSortableColumn="hora_cita">Hora Cita <p-sortIcon field="hora_cita"></p-sortIcon></th>
+        <th pSortableColumn="numeroCita">Número Cita <p-sortIcon field="numeroCita"></p-sortIcon></th>
+        <th pSortableColumn="tipo_cita">Tipo Cita <p-sortIcon field="tipo_cita"></p-sortIcon></th>
+        <th pSortableColumn="motivo">Motivo <p-sortIcon field="motivo"></p-sortIcon></th>
+        <th pSortableColumn="estado_cita">Estado Cita <p-sortIcon field="estado_cita"></p-sortIcon></th>
+        <th>Acciones</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-appointment>
+      <tr>
+        <td>{{ appointment.cedula }}</td>
+        <td>{{ appointment.fecha_cita | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ appointment.hora_cita | formatTime }}</td>
+        <td>{{ appointment.numeroCita }}</td>
+        <td>{{ appointment.tipo_cita }}</td>
+        <td>{{ appointment.motivo }}</td>
+        <td>
+          <span [ngClass]="getStatusClass(appointment.estado_cita)">
+            {{ appointment.estado_cita }}
+          </span>
+        </td>
+        <td>
+          <div class="flex align-items-center justify-content-center gap-2">
+            <p-button
+              icon="pi pi-pencil"
+              class="mr-2"
+              [rounded]="true"
+              [outlined]="true"
+              severity="success"
+              (onClick)="editAppointment(appointment)" />
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              [rounded]="true"
+              [outlined]="true"
+              (onClick)="deleteAppointment(appointment)" />
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="summary">
+      <div class="flex align-items-center justify-content-between">
+        En total hay {{ appointments ? appointments.length : 0 }} citas.
+      </div>
+    </ng-template>
+  </p-table>
+
+  <!-- Dialogo para crear/editar una cita -->
+  <p-dialog
+    [(visible)]="appointmentDialog"
+    [style]="{ width: '450px' }"
+    header="Detalles de la Cita"
+    [modal]="true"
+    styleClass="p-fluid">
+    <ng-template pTemplate="content">
+      <div class="field">
+        <label for="cedula">Cédula</label>
+        <input type="text" pInputText id="cedula" [(ngModel)]="appointment.cedula" [disabled]="blockNumeroCita" required />
+        <small class="p-error" *ngIf="submitted && !appointment.cedula">
+          La cédula es requerida.
+        </small>
+      </div>
+      <div class="field">
+        <label for="fecha_cita">Fecha de la Cita</label>
+        <input type="date" pInputText id="fecha_cita" [(ngModel)]="appointment.fecha_cita" required />
+        <small class="p-error" *ngIf="submitted && !appointment.fecha_cita">
+          La fecha es requerida.
+        </small>
+      </div>
+      <div class="field">
+        <label for="hora_cita">Hora de la Cita</label>
+        <input type="time" pInputText id="hora_cita" [(ngModel)]="appointment.hora_cita" required />
+        <small class="p-error" *ngIf="submitted && !appointment.hora_cita">
+          La hora es requerida.
+        </small>
+      </div>
+      <div class="field">
+        <label for="tipo_cita">Tipo de Cita</label>
+        <p-dropdown
+          [options]="tiposCita"
+          [(ngModel)]="appointment.tipo_cita"
+          placeholder="Seleccionar Tipo de Cita"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value">
+        </p-dropdown>
+        <small class="p-error" *ngIf="submitted && !appointment.tipo_cita">
+          El tipo de cita es requerido.
+        </small>
+      </div>
+      <div class="field">
+        <label for="motivo">Motivo</label>
+        <textarea pInputTextarea id="motivo" [(ngModel)]="appointment.motivo" required></textarea>
+        <small class="p-error" *ngIf="submitted && !appointment.motivo">
+          El motivo es requerido.
+        </small>
+      </div>
+      <div class="field" *ngIf="blockNumeroCita">
+        <label for="estado_cita">Estado de la Cita</label>
+        <p-dropdown
+          [options]="estadosEdicion"
+          [(ngModel)]="appointment.estado_cita"
+          placeholder="Seleccionar Estado de la Cita"
+          [showClear]="true"
+          optionLabel="label"
+          optionValue="value">
+        </p-dropdown>
+        <small class="p-error" *ngIf="submitted && !appointment.estado_cita">
+          El estado es requerido.
+        </small>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+      <p-button
+        label="Cancelar"
+        icon="pi pi-times"
+        [text]="true"
+        (onClick)="hideDialog()" />
+      <p-button
+        label="Guardar"
+        icon="pi pi-check"
+        [text]="true"
+        (onClick)="saveAppointment()" />
+    </ng-template>
+  </p-dialog>
+
+  <p-confirmDialog [style]="{ width: '450px' }" />
+</div>

@@ -1,6 +1,4 @@
 export interface HistoriaClinica {
-  Nombres: string;
-  Apellidos: string;
   Cedula: string;
   Numero: string;
   Enfermedadesbase: string[];
@@ -9,5 +7,5 @@ export interface HistoriaClinica {
   Hongos: string[];
   Parasitos: string[];
   Emociones: string[];
-  Brujeria: string[];
+  SistemaEnergetico: string[];
 }
