@@ -1,0 +1,16 @@
+<div class="home-container">
+  <div class="home-header-container">
+    <div class="home-header-logo">
+      <img src="\assets\logo-biosern.png" alt="">
+    </div>
+    <p-tabMenu [model]="items"/>
+    <div class="logout-button">
+      <p-button label="Cerrar Sesión" icon="pi pi-power-off" (onClick)="logout()"></p-button>
+    </div>
+  </div>
+  <div>
+    <app-list-patient (newRecordEvent)="newRecord($event)"(newAppointmentEvent)="newAppointment($event)" *ngIf="stateMenu === 0"></app-list-patient>
+    <app-medical-record [patient]="patient" *ngIf="stateMenu === 1"></app-medical-record>
+    <app-appointment [patient]="patient"  *ngIf="stateMenu === 2"></app-appointment>
+  </div>
+</div>

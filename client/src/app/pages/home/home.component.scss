@@ -1,0 +1,35 @@
+.home-container {
+  width: 100%;
+}
+
+.home-header-container {
+  width: 100%;
+  height: 3.16vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 2vw;
+  padding: 0 2vw;
+
+  .home-header-logo {
+    height: 100%;
+    padding: 4px 0;
+    img {
+      height: 100%;
+    }
+  }
+
+  .logout-button {
+    margin-left: auto; /* Empuja el botón al extremo derecho */
+    height: 2.5vw; /* Altura ajustada para que coincida con el contenedor */
+    padding: 0 1.5vw; /* Añade un espacio horizontal al botón */
+    font-size: 1vw; /* Tamaño de fuente proporcional */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white; /* Texto en blanco */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+}
